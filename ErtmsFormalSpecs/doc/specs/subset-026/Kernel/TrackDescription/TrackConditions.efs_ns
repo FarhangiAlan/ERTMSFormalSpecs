@@ -51,6 +51,12 @@
  NeedsRequirement="FALSE"
  Name="Applied"
 >
+</StructureElement><StructureElement
+ TypeName="Messages.NID_PACKET"
+ Default=""
+ Mode="Internal"
+ Name="Type"
+>
 </StructureElement></Structure><Structure
  Implemented="TRUE"
  Name="TrackCondition"
@@ -511,6 +517,12 @@ INITIAL_VALUE
 <ReqRef
  Id="3.12.1.2.1"
 >
+</ReqRef><ReqRef
+ Id="3.12.1.2.1.2"
+>
+</ReqRef><ReqRef
+ Id="3.12.1.2.1.2"
+>
 </ReqRef><Parameters>
 <Parameter
  Type="TrackConditionInformation"
@@ -519,10 +531,16 @@ INITIAL_VALUE
 </Parameter></Parameters>
 <Cases>
 <Case
- Name="True"
+ Name="BigMetalMC"
 >
 <PreConditions>
-<PreCondition>TrainPosition.FrontEndPosition(Default.DistanceInterval.Max) &gt; aTrackCondition.Distance</PreCondition></PreConditions>
+<PreCondition>aTrackCondition.Type == Messages.PACKET.TRACK_TO_TRAIN.TRACK_CONDITION_BIG_METAL_MASSES.Message.NID_PACKET</PreCondition><PreCondition>BTM.AntennaPosition(PointOfInterest=&gt;DistanceInterval.Max) &gt; aTrackCondition.Distance</PreCondition></PreConditions>
+<Expression>True</Expression>
+</Case><Case
+ Name="TrackCondition"
+>
+<PreConditions>
+<PreCondition>TrainPosition.FrontEndPosition(Default.DistanceInterval.Max) &gt; aTrackCondition.Distance</PreCondition><PreCondition>aTrackCondition.Type == Messages.PACKET.TRACK_TO_TRAIN.TRACK_CONDITION.Message.NID_PACKET</PreCondition></PreConditions>
 <Expression>True</Expression>
 </Case><Case
  Name="False"
@@ -545,7 +563,13 @@ INITIAL_VALUE
  NeedsRequirement="FALSE"
  Name="ConditionExitsApplicability"
 >
-<Parameters>
+<ReqRef
+ Id="3.12.1.2.1"
+>
+</ReqRef><ReqRef
+ Id="3.12.1.2.1.2"
+>
+</ReqRef><Parameters>
 <Parameter
  Type="TrackConditionInformation"
  Name="aCondition"
@@ -555,7 +579,15 @@ INITIAL_VALUE
 <Case
  Name="RearEndPosition after TrackCond"
 >
+<PreConditions>
+<PreCondition>aCondition.Type == Messages.PACKET.TRACK_TO_TRAIN.TRACK_CONDITION.Message.NID_PACKET</PreCondition></PreConditions>
 <Expression>TrainPosition.RearEndPosition(Default.DistanceInterval.Min) &gt; (aCondition.Distance + BaseTypes.LengthToDistance(aCondition.Length))</Expression>
+</Case><Case
+ Name="AnntenaPosition after TrackCondition"
+>
+<PreConditions>
+<PreCondition>aCondition.Type == Messages.PACKET.TRACK_TO_TRAIN.TRACK_CONDITION_BIG_METAL_MASSES.Message.NID_PACKET</PreCondition></PreConditions>
+<Expression>BTM.AntennaPosition(PointOfInterest=&gt;DistanceInterval.Min) &gt; (aCondition.Distance + BaseTypes.LengthToDistance(aCondition.Length))</Expression>
 </Case></Cases>
 </Function></Functions>
 <Procedures>
@@ -682,7 +714,8 @@ INITIAL_VALUE
     {
         Distance =&gt; MessageTypes.QScaleDistance ( distance =&gt; Packet.D_TRACKCOND, scale =&gt; Packet.Q_SCALE ),
         Length =&gt; MessageTypes.QScaleLength ( length =&gt; Packet.L_TRACKCOND, scale =&gt; Packet.Q_SCALE ),
-        Value =&gt; CreateTCValue ( Packet.M_TRACKCOND )
+        Value =&gt; CreateTCValue ( Packet.M_TRACKCOND ),
+        Type =&gt; Packet.NID_PACKET
     }
 IN
     TCProfile.Conditions</Action><Action>TCProfile.InitialState &lt;- Packet.Q_TRACKINIT</Action></Actions>
@@ -760,7 +793,10 @@ IN
  NeedsRequirement="FALSE"
  Name="ApplyWhenEntersApplicability"
 >
-<Parameters>
+<ReqRef
+ Id="3.12.1.2.1"
+>
+</ReqRef><Parameters>
 <Parameter
  Type="TrackConditionInformation"
  Name="aTrackCondition"
@@ -770,13 +806,14 @@ IN
 <Rule
  Priority="Processing"
  NeedsRequirement="FALSE"
- Name="&lt;Rule1&gt;"
+ Name="UpDateATrackCondition"
 >
 <SubRules></SubRules>
 <Conditions>
 <RuleCondition
+ Implemented="TRUE"
  NeedsRequirement="FALSE"
- Name="&lt;RuleCondition1&gt;"
+ Name="UpDateATrackConditions"
 >
 <PreConditions>
 <PreCondition>ConditionEntersApplicabilityNow(aTrackCondition)</PreCondition><PreCondition>NOT aTrackCondition.Applied</PreCondition></PreConditions>
@@ -810,6 +847,53 @@ IN
 <PreCondition>ConditionExitsApplicability ( aTrackCondition )</PreCondition></PreConditions>
 <Actions>
 <Action>RevokeTrackCondition ( aTrackCondition )</Action></Actions>
+</RuleCondition></Conditions>
+</Rule></Rules>
+</Procedure><Procedure
+ Name="HandleNewBigMetalMTrackCondition"
+>
+<Parameters>
+<Parameter
+ Type="Messages.PACKET.TRACK_TO_TRAIN.TRACK_CONDITION_BIG_METAL_MASSES.Message"
+ Name="Packet"
+>
+</Parameter></Parameters>
+<Rules>
+<Rule
+ Priority="Processing"
+ Name="RemoveOldATrackConditions"
+>
+<SubRules></SubRules>
+<Conditions>
+<RuleCondition
+ Name="RemoveOldABMMTrackConditions"
+>
+<PreConditions>
+</PreConditions>
+<Actions>
+<Action>REMOVE ALL X.Distance &gt;= Default.MessageTypes.QScaleDistance ( distance =&gt; Packet.D_TRACKCOND, scale =&gt; Packet.Q_SCALE) IN TCProfile.Conditions</Action></Actions>
+</RuleCondition></Conditions>
+</Rule><Rule
+ Priority="Processing"
+ Name="InsertBMMC"
+>
+<SubRules></SubRules>
+<Conditions>
+<RuleCondition
+ Name="InsertNewBMTC"
+>
+<PreConditions>
+</PreConditions>
+<Actions>
+<Action>INSERT
+    TrackConditionInformation
+  {  
+        Distance =&gt; MessageTypes.QScaleDistance ( distance =&gt; Packet.D_TRACKCOND, scale =&gt; Packet.Q_SCALE ),
+        Length =&gt; MessageTypes.QScaleLength ( length =&gt; Packet.L_TRACKCOND, scale =&gt; Packet.Q_SCALE ),
+        Type =&gt; Packet.NID_PACKET
+    }
+IN
+    TCProfile.Conditions</Action></Actions>
 </RuleCondition></Conditions>
 </Rule></Rules>
 </Procedure></Procedures>

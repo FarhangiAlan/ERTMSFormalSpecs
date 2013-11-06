@@ -183,8 +183,7 @@
  version="3.0.0"
  functionalBlockName=""
  Name=""
->Exception for Infill information: The locations given in the packets following packet 136 (Infill Location Reference) shall be referred to the balise group indicated in such packet.
-</Paragraph><Paragraph
+>Exception for Infill information: The locations given in the packets following packet 136 (Infill Location Reference) shall be referred to the balise group indicated in such packet.</Paragraph><Paragraph
  id="8.4.1.3.2"
  type="NOTE"
  scope="OBU_AND_TRACK"
@@ -671,8 +670,7 @@
  version="3.0.0"
  functionalBlockName=""
  Name=""
->All currently not defined message identifiers are reserved for future use and shall be considered as invalid values (i.e. like spare values). Exception: reception of information only differing by Y with regards to the highest system version number X supported by on-board (refer to section 3.17.3.11 b)).
-</Paragraph></Sub>
+>All currently not defined message identifiers are reserved for future use and shall be considered as invalid values (i.e. like spare values). Exception: reception of information only differing by Y with regards to the highest system version number X supported by on-board (refer to section 3.17.3.11 b)).</Paragraph></Sub>
 </Paragraph><Paragraph
  id="8.4.4.2"
  type="NOTE"
@@ -1206,8 +1204,7 @@
 	c) Message 155 (Initiation of a communication session),
 	d) Message 156 (Termination of a communication session),
 	e) Intentionally deleted
-	f) Message 159 (Session Established).
-</Paragraph><Paragraph
+	f) Message 159 (Session Established).</Paragraph><Paragraph
  id="8.4.4.7.3"
  type="NOTE"
  scope="OBU_AND_TRACK"

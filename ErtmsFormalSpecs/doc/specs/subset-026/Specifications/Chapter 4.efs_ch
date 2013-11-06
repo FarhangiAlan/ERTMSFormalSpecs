@@ -4521,8 +4521,7 @@
  version="3.0.0"
  functionalBlockName=""
  Name=""
->Manage Track Conditions excluding Sound Horn, Non Stopping Areas, Tunnel Stopping Areas and Big Metal Masses; 3.12.1; FS, LS OS, NL, TR, PT
-</Paragraph><Paragraph
+>Manage Track Conditions excluding Sound Horn, Non Stopping Areas, Tunnel Stopping Areas and Big Metal Masses; 3.12.1; FS, LS OS, NL, TR, PT</Paragraph><Paragraph
  id="4.5.2.1.68"
  type="REQUIREMENT"
  scope="OBU"
@@ -4543,8 +4542,7 @@
  version="3.0.0"
  functionalBlockName=""
  Name=""
->Manage Track Condition Big Metal Masses; 3.12.1; SB PS, SH, FS, LS, SR, OS, SL, NL, UN, TR, PT, SF, SN, RV
-</Paragraph><Paragraph
+>Manage Track Condition Big Metal Masses; 3.12.1; SB PS, SH, FS, LS, SR, OS, SL, NL, UN, TR, PT, SF, SN, RV</Paragraph><Paragraph
  id="4.5.2.1.70"
  type="REQUIREMENT"
  scope="OBU"

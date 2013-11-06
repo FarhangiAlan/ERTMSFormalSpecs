@@ -968,6 +968,13 @@ ConsiderPacket ( PacketOrientation =&gt; Packet.TRACK_TO_TRAIN.REPOSITIONING_INF
 <PreCondition>ConsiderPacket ( PacketOrientation=&gt;Packet.TRACK_TO_TRAIN.CONDITIONAL_LEVEL_TRANSITION_ORDER.Q_DIR )</PreCondition></PreConditions>
 <Actions>
 <Action>Kernel.LevelTransition.CLTOReceived ( Packet=&gt;Packet.TRACK_TO_TRAIN.CONDITIONAL_LEVEL_TRANSITION_ORDER )</Action></Actions>
+</RuleCondition><RuleCondition
+ Name="HandleBigMetalMasses"
+>
+<PreConditions>
+<PreCondition>ConsiderPacket ( PacketOrientation =&gt; Packet.TRACK_TO_TRAIN.TRACK_CONDITION_BIG_METAL_MASSES.Q_DIR )</PreCondition></PreConditions>
+<Actions>
+<Action>Kernel.TrackDescription.TrackConditions.HandleNewBigMetalMTrackCondition ( Packet.TRACK_TO_TRAIN.TRACK_CONDITION_BIG_METAL_MASSES )</Action></Actions>
 </RuleCondition></Conditions>
 </Rule></Rules>
 </Procedure><Procedure
